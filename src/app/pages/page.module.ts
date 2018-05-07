@@ -13,6 +13,7 @@ import { PagesComponent } from './pages.component';
 import { SharedModule } from '../shared/share.module';
 import { IncreaseComponent } from '../components/increase/increase.component';
 import { DonutChartComponent } from '../components/donut-chart/donut-chart.component';
+import { AccountSettingsComponent } from './account-settings/account-settings.component';
 
 
 import { PAGES_ROUTES } from './pages.routes';
@@ -27,7 +28,8 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
         ProgressComponent,
         Charts1Component,
         IncreaseComponent,
-        DonutChartComponent
+        DonutChartComponent,
+        AccountSettingsComponent
     ],
     imports: [
         SharedModule,
