@@ -18,6 +18,8 @@ import { AccountSettingsComponent } from './account-settings/account-settings.co
 
 import { PAGES_ROUTES } from './pages.routes';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { PromisesComponent } from './promises/promises.component';
+import { RxjsComponent } from './rxjs/rxjs.component';
 
 
 
@@ -29,7 +31,9 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
         Charts1Component,
         IncreaseComponent,
         DonutChartComponent,
-        AccountSettingsComponent
+        AccountSettingsComponent,
+        PromisesComponent,
+        RxjsComponent
     ],
     imports: [
         SharedModule,
