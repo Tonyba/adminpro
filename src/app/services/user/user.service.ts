@@ -3,9 +3,10 @@ import { HttpClient } from '@angular/common/http';
 import { User } from '../../models/user.model';
 import { URL_SERVICES } from '../../config/config';
 import 'rxjs/add/operator/map';
-import * as swal from 'sweetalert';
 import { Router } from '@angular/router';
 import { UploadFileService } from '../service.index';
+
+declare var swal: any;
 
 @Injectable()
 export class UserService {
@@ -40,6 +41,30 @@ export class UserService {
     this.token = token;
   }
 
+  searchUser( term: string ) {
+    const url = URL_SERVICES + 'search/users/' + term;
+
+    return this.http.get( url )
+                    .map( (resp: any) =>  resp.users);
+  }
+
+  deleteUser( id: string ) {
+    let url = URL_SERVICES + 'user/' + id;
+    url += '?token=' + this.token;
+
+    return this.http.delete( url )
+                    .map( (resp: any) => {
+                      swal('user deleted', 'the user has been successfuly deleted', 'success');
+                      return true;
+                    });
+  }
+
+  getUsers( from: number = 0 ) {
+    const url = URL_SERVICES + 'user?from=' + from;
+
+    return this.http.get(url) ;
+  }
+
   login( user: User, remember: boolean = false ) {
 
     if ( remember ) {
@@ -63,20 +88,25 @@ export class UserService {
 
       return this.http.post( url, user )
                       .map( (resp: any ) => {
-                          // swal('User added', user.email, 'success');
+                          swal('User added', user.email, 'success');
                           return resp.user;
                       });
-    }
-  
-    updateUser( user: User ) {
+  }
+
+
+  updateUser( user: User ) {
     let url = URL_SERVICES + 'user/' + user._id;
     url += '?token=' + localStorage.getItem('token') ;
 
     return this.http.put( url, user )
                     .map( (resp: any) =>  {
-                      const userDB: User = resp.user;
-                      this.saveStorage( userDB._id, this.token, userDB  );
-                      // swal('user updated', user.name, 'success');
+
+                      if ( user._id === this.user._id ) {
+                         const userDB: User = resp.user;
+                         this.saveStorage( userDB._id, this.token, userDB  );
+                      }
+
+                      swal('user updated', user.name, 'success');
 
                       return true;
                     });
@@ -113,7 +143,7 @@ export class UserService {
                   console.log(resp);
 
                   this.user.img = resp.user.img;
-                  // swal('image updated', this.user.name, 'success');
+                  swal('image updated', this.user.name, 'success');
                   this.saveStorage(id, this.token, this.user);
                 })
                 .catch( resp => {
