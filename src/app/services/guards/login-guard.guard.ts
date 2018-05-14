@@ -14,6 +14,7 @@ export class LoginGuardGuard implements CanActivate {
   canActivate() {
 
     if ( this._userService.islogged() ) {
+      console.log('pass guard');
       return true;
     } else {
       console.log('blocked faggot');

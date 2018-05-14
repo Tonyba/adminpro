@@ -6,6 +6,7 @@ import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs/Observable';
 import * as swal from 'sweetalert';
 import { Router } from '@angular/router';
+import { UploadFileService } from '../service.index';
 
 @Injectable()
 export class UserService {
@@ -15,8 +16,24 @@ export class UserService {
 
   constructor(
    public http: HttpClient,
-   public router: Router
+   public router: Router,
+   public _upload: UploadFileService
   ) { }
+
+  updateUser( user: User ) {
+    let url = URL_SERVICES + 'user/' + user._id;
+    url += '?token=' + localStorage.getItem('token') ;
+
+    return this.http.put( url, user )
+                    .map( (resp: any) =>  {
+                      const userDB: User = resp.user;
+                      this.saveStorage( userDB._id, this.token, userDB  );
+                      // swal('user updated', user.name, 'success');
+
+                      return true;
+                    });
+  }
+
 
   logout() {
     this.user = null;
@@ -28,14 +45,10 @@ export class UserService {
     this.router.navigate(['/login']);
   }
 
-  islogged() {
-    return ( this.token.length > 5 ) ? true : false ;
-  }
-
   loadStorage() {
     if ( localStorage.getItem('token')  ) {
-      this.token = localStorage.getItem('token');
-      this.user = JSON.parse(localStorage.getItem('user'));
+     this.token = localStorage.getItem('token');
+    return this.user = JSON.parse(localStorage.getItem('user'));
     } else {
       this.token = '';
       this.user = null;
@@ -56,7 +69,7 @@ export class UserService {
 
     return this.http.post( url, user )
                     .map( (resp: any ) => {
-                        swal('User added', user.email, 'success');
+                        // swal('User added', user.email, 'success');
                         return resp.user;
                     });
   }
@@ -88,6 +101,26 @@ export class UserService {
                       return true;
                     });
   }
+
+  islogged() {
+    this.token = localStorage.getItem('token');
+    return ( this.token.length > 5 ) ? true : false ;
+  }
+
+  changeImage( file: File, id: string ) {
+    this._upload.uploadFile( file, 'users', id )
+                .then( (resp: any) => {
+                  console.log(resp);
+
+                  this.user.img = resp.user.img;
+                  // swal('image updated', this.user.name, 'success');
+                  this.saveStorage(id, this.token, this.user);
+                })
+                .catch( resp => {
+                  console.error(resp);
+                });
+  }
+
 
 
 }

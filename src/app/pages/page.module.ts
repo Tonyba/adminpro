@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
-
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
+import { PipeModule } from '../pipes/pipes.module';
 
 // ng2-charts
 import { ChartsModule } from 'ng2-charts';
@@ -17,9 +17,10 @@ import { AccountSettingsComponent } from './account-settings/account-settings.co
 
 
 import { PAGES_ROUTES } from './pages.routes';
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { PromisesComponent } from './promises/promises.component';
 import { RxjsComponent } from './rxjs/rxjs.component';
+import { ProfileComponent } from './profile/profile.component';
+
 
 
 
@@ -33,13 +34,16 @@ import { RxjsComponent } from './rxjs/rxjs.component';
         DonutChartComponent,
         AccountSettingsComponent,
         PromisesComponent,
-        RxjsComponent
+        RxjsComponent,
+        ProfileComponent
     ],
     imports: [
+        CommonModule,
         SharedModule,
         PAGES_ROUTES,
         FormsModule,
-        ChartsModule
+        ChartsModule,
+        PipeModule
     ],
     exports: [
         DashboardComponent,
