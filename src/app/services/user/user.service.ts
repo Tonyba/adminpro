@@ -3,7 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { User } from '../../models/user.model';
 import { URL_SERVICES } from '../../config/config';
 import 'rxjs/add/operator/map';
-import { Observable } from 'rxjs/Observable';
 import * as swal from 'sweetalert';
 import { Router } from '@angular/router';
 import { UploadFileService } from '../service.index';
@@ -18,31 +17,8 @@ export class UserService {
    public http: HttpClient,
    public router: Router,
    public _upload: UploadFileService
-  ) { }
-
-  updateUser( user: User ) {
-    let url = URL_SERVICES + 'user/' + user._id;
-    url += '?token=' + localStorage.getItem('token') ;
-
-    return this.http.put( url, user )
-                    .map( (resp: any) =>  {
-                      const userDB: User = resp.user;
-                      this.saveStorage( userDB._id, this.token, userDB  );
-                      // swal('user updated', user.name, 'success');
-
-                      return true;
-                    });
-  }
-
-
-  logout() {
-    this.user = null;
-    this.token = '';
-
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-
-    this.router.navigate(['/login']);
+  ) {
+    this.loadStorage();
   }
 
   loadStorage() {
@@ -64,17 +40,7 @@ export class UserService {
     this.token = token;
   }
 
-  createUser( user: User ): Observable<any> {
-    const url = URL_SERVICES + 'user' ;
-
-    return this.http.post( url, user )
-                    .map( (resp: any ) => {
-                        // swal('User added', user.email, 'success');
-                        return resp.user;
-                    });
-  }
-
-  login( user: User, remember: boolean = false ): Observable<any> {
+  login( user: User, remember: boolean = false ) {
 
     if ( remember ) {
       localStorage.setItem('email', user.email );
@@ -90,6 +56,40 @@ export class UserService {
                       return true;
                     });
 
+  }
+
+  createUser( user: User ) {
+      const url = URL_SERVICES + 'user' ;
+
+      return this.http.post( url, user )
+                      .map( (resp: any ) => {
+                          // swal('User added', user.email, 'success');
+                          return resp.user;
+                      });
+    }
+  
+    updateUser( user: User ) {
+    let url = URL_SERVICES + 'user/' + user._id;
+    url += '?token=' + localStorage.getItem('token') ;
+
+    return this.http.put( url, user )
+                    .map( (resp: any) =>  {
+                      const userDB: User = resp.user;
+                      this.saveStorage( userDB._id, this.token, userDB  );
+                      // swal('user updated', user.name, 'success');
+
+                      return true;
+                    });
+  }
+
+  logout() {
+    this.user = null;
+    this.token = '';
+
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+
+    this.router.navigate(['/login']);
   }
 
   loginGoogle(token: string) {

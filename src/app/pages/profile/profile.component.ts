@@ -11,12 +11,12 @@ export class ProfileComponent implements OnInit {
 
   user: User;
   uploadImage: File;
-  TempImage: string;
+  tempImage: string;
 
   constructor(
     public _userService: UserService
   ) {
-    this.user = _userService.loadStorage();
+    this.user = this._userService.user;
    }
 
   ngOnInit() {
@@ -25,21 +25,28 @@ export class ProfileComponent implements OnInit {
 
 
   selectImage(file: File) {
+
     if (!file) {
       this.uploadImage = null;
       return;
     }
 
-    if ( file.type.indexOf('image') < 1 ) {
+    if ( file.type.indexOf('image') < 0 ) {
       // swal('only images', 'the selected file is not an image', 'error');
       this.uploadImage = null;
       return;
     }
 
+    this.uploadImage = file;
+
     const reader = new FileReader();
     const urlImageTemp = reader.readAsDataURL(file);
 
-    reader.onloadend = () => this.TempImage = reader.result;
+    reader.onloadend = () => {
+      this.tempImage = reader.result;
+    };
+
+
 
   }
 

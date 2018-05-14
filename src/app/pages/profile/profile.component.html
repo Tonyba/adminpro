@@ -31,10 +31,13 @@
         <div class="card">
             <div class="card-body" align="center">
                 <h4 class="card-title">User Picture</h4>
-                <img *ngIf="!TempImage" [src]="user.img | image" class="w150">
-                <img *ngIf="TempImage" [src]="TempImage" class="w150">
+                <img *ngIf="!tempImage" [src]="user.img | image" class="w150">
+                <img *ngIf="tempImage" [src]="tempImage" class="w150">
+
+                <br><br>
 
                 <input (change)="selectImage( $event.target.files[0] )" type="file">
+
                 <br><br>
 
                 <button (click)="changeImage()" [disabled]="!uploadImage" type="button" class="btn btn-block btn-success waves-effect waves-light m-r-10">

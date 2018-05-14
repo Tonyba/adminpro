@@ -18,7 +18,8 @@ export class HeaderComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.user = this._userService.loadStorage();
+    this.user = this._userService.user;
+    console.log(this.user.img);
   }
 
 }
