@@ -9,8 +9,8 @@ import {
   UserService,
   LoginGuardGuard,
   UploadFileService,
-  MedicService
-
+  MedicService,
+  AdminGuard
 } from './service.index';
 import { ModalUploadService } from '../components/model-upload/modal-upload.service';
 import { HospitalService } from './hospital/hospital.service';
@@ -31,7 +31,8 @@ import { HospitalService } from './hospital/hospital.service';
   LoginGuardGuard,
   UploadFileService,
   ModalUploadService,
-  MedicService
+  MedicService,
+  AdminGuard
   ]
 })
 export class ServiceModule { }

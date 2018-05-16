@@ -3,8 +3,11 @@ import { HttpClient } from '@angular/common/http';
 import { User } from '../../models/user.model';
 import { URL_SERVICES } from '../../config/config';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/catch';
+import { Observable } from 'rxjs/Observable';
 import { Router } from '@angular/router';
 import { UploadFileService } from '../service.index';
+
 
 declare var swal: any;
 
@@ -13,6 +16,7 @@ export class UserService {
 
   user: User;
   token: string;
+  menu: any = [];
 
   constructor(
    public http: HttpClient,
@@ -25,20 +29,24 @@ export class UserService {
   loadStorage() {
     if ( localStorage.getItem('token')  ) {
      this.token = localStorage.getItem('token');
-    return this.user = JSON.parse(localStorage.getItem('user'));
+     this.user = JSON.parse(localStorage.getItem('user'));
+     this.menu = JSON.parse( localStorage.getItem('menu') );
     } else {
       this.token = '';
       this.user = null;
+      this.menu = [];
     }
   }
 
-  saveStorage( id: string, token: string, user: User) {
+  saveStorage( id: string, token: string, user: User, menu: any) {
     localStorage.setItem('id', id);
     localStorage.setItem('token', token);
     localStorage.setItem('user', JSON.stringify(user));
+    localStorage.setItem('menu', JSON.stringify(menu) );
 
     this.user = user;
     this.token = token;
+    this.menu = menu;
   }
 
   searchUser( term: string ) {
@@ -77,8 +85,12 @@ export class UserService {
 
     return this.http.post( url, user )
                     .map( (resp: any) => {
-                      this.saveStorage( resp.id, resp.token, resp.user );
+                      this.saveStorage( resp.id, resp.token, resp.user, resp.menu );
                       return true;
+                    })
+                    .catch( err => {
+                          swal( 'error on login', err.error.message, 'error' );
+                          return Observable.throw( err );
                     });
 
   }
@@ -90,7 +102,11 @@ export class UserService {
                       .map( (resp: any ) => {
                           swal('User added', user.email, 'success');
                           return resp.user;
-                      });
+                      })
+                      .catch( err => {
+                        swal( err.error.message, err.errors.message, 'error' );
+                        return Observable.throw( err );
+                  });
   }
 
 
@@ -103,21 +119,27 @@ export class UserService {
 
                       if ( user._id === this.user._id ) {
                          const userDB: User = resp.user;
-                         this.saveStorage( userDB._id, this.token, userDB  );
+                         this.saveStorage( userDB._id, this.token, userDB, this.menu  );
                       }
 
                       swal('user updated', user.name, 'success');
 
                       return true;
+                    })
+                    .catch( err => {
+                      swal( err.error.message, err.errors.message, 'error' );
+                      return Observable.throw( err );
                     });
   }
 
   logout() {
     this.user = null;
     this.token = '';
+    this.menu = [];
 
     localStorage.removeItem('token');
     localStorage.removeItem('user');
+    localStorage.removeItem('menu');
 
     this.router.navigate(['/login']);
   }
@@ -127,7 +149,7 @@ export class UserService {
 
     return this.http.post( url, {token} )
                     .map( (resp: any) => {
-                      this.saveStorage( resp.id, resp.token, resp.user );
+                      this.saveStorage( resp.id, resp.token, resp.user, resp.menu );
                       return true;
                     });
   }
@@ -144,7 +166,7 @@ export class UserService {
 
                   this.user.img = resp.user.img;
                   swal('image updated', this.user.name, 'success');
-                  this.saveStorage(id, this.token, this.user);
+                  this.saveStorage(id, this.token, this.user, this.menu);
                 })
                 .catch( resp => {
                   console.error(resp);

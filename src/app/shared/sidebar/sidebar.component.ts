@@ -20,7 +20,7 @@ export class SidebarComponent implements OnInit {
 
   ngOnInit() {
     this.user = this._userService.user;
-    console.log(this.user.img);
+    this._sidebar.loadMenu();
   }
 
 }

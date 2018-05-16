@@ -25,6 +25,7 @@ import { ModelUploadComponent } from '../components/model-upload/model-upload.co
 import { HospitalsComponent } from './hospitals/hospitals.component';
 import { MedicsComponent } from './medics/medics.component';
 import { MedicComponent } from './medics/medic.component';
+import { SearchComponent } from './search/search.component';
 
 
 
@@ -45,7 +46,8 @@ import { MedicComponent } from './medics/medic.component';
         ModelUploadComponent,
         HospitalsComponent,
         MedicsComponent,
-        MedicComponent
+        MedicComponent,
+        SearchComponent
     ],
     imports: [
         CommonModule,

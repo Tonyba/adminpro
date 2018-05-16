@@ -19,7 +19,10 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit() {
     this.user = this._userService.user;
-    console.log(this.user.img);
+  }
+
+  search( term: string ) {
+    this.router.navigate(['/search', term]);
   }
 
 }
