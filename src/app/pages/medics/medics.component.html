@@ -1,0 +1,61 @@
+<div class="row animated fadeIn">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <input #input (keyup)="searchMedic(input.value)" type="text" class="form-control" placeholder="Search Medic...">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+
+                <div class="row justify-content-between">
+                    <h3 class="card-title ml-3">Hospitals registered ( <small> {{ _medicService.totalMedics }} </small> ) </h3>
+
+                    <button [routerLink]="['/medic', 'new']" type="button" class="btn waves-effect waves-light btn-rounded btn-primary mr-3">
+                      <i class="fa fa-plus"></i> Create Medics
+                    </button>
+
+                </div>
+
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Photo</th>
+                            <th>Medic</th>
+                            <th>Hospital</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody *ngIf="medics">
+                        <tr *ngFor="let medic of medics">
+                            <td>
+                                <img [src]="medic.img | image:'medic'" class="img-50 img-circle pointer" alt="">
+                            </td>
+                            <td>
+                                {{medic.name}}
+                            </td>
+                            <td>
+                                {{medic.hospital.name}}
+                            </td>
+                            <td>
+                                <button [routerLink]="['/medic', medic._id ]" class="btn btn-primary" type="button">
+                                    <i class="fa fa-edit"></i>
+                                </button>
+
+                                <button (click)="deleteMedic( medic )" type="button" class="btn btn-danger">
+                                    <i class="fa fa-trash" ></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>

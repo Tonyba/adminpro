@@ -77,7 +77,7 @@ export class UsersComponent implements OnInit {
 
   deleteUser( user: User ) {
     if ( user._id === this._userService.user._id ) {
-      // swal( 'cannot delete user', 'you can´t delete yourself', 'error' );
+      swal( 'cannot delete user', 'you can´t delete yourself', 'error' );
       return;
     }
 

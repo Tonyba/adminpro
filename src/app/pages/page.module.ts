@@ -22,6 +22,9 @@ import { RxjsComponent } from './rxjs/rxjs.component';
 import { ProfileComponent } from './profile/profile.component';
 import { UsersComponent } from './users/users.component';
 import { ModelUploadComponent } from '../components/model-upload/model-upload.component';
+import { HospitalsComponent } from './hospitals/hospitals.component';
+import { MedicsComponent } from './medics/medics.component';
+import { MedicComponent } from './medics/medic.component';
 
 
 
@@ -39,7 +42,10 @@ import { ModelUploadComponent } from '../components/model-upload/model-upload.co
         RxjsComponent,
         ProfileComponent,
         UsersComponent,
-        ModelUploadComponent
+        ModelUploadComponent,
+        HospitalsComponent,
+        MedicsComponent,
+        MedicComponent
     ],
     imports: [
         CommonModule,
